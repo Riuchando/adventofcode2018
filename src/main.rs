@@ -22,6 +22,7 @@ fn main() -> Result<(), Error> {
         "day3" => {
             println!("{}", day3::part1()?);
             println!("{}", day3::part2()?);
+            println!("{}", day3::part2_with_mathy_stuff()?);
         }
 
         _ => println!("{}", "invalid argument"),
