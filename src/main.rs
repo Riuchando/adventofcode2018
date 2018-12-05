@@ -1,8 +1,11 @@
 // #[macro_use]
+#![feature(test)]
 extern crate chrono;
 extern crate itertools;
 use std::env;
 use std::io::Error;
+
+extern crate test;
 
 mod day1;
 mod day2;
@@ -39,4 +42,17 @@ fn main() -> Result<(), Error> {
     }
 
     Ok(())
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use test::Bencher;
+    #[bench]
+    fn bench_day5_part1(b: &mut Bencher) {
+        b.iter(|| day5::part1());
+    }
+    #[bench]
+    fn bench_day5_part2(b: &mut Bencher) {
+        b.iter(|| day5::part2());
+    }
 }

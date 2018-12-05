@@ -71,7 +71,7 @@ pub fn part2() -> Result<u32, Error> {
                     left_vec.push(character);
                 }
             }
-            println!("{} {:?}", ascii_int as u8 as char, left_vec);
+            // println!("{} {:?}", ascii_int as u8 as char, left_vec);
             char_count.insert(ascii_int as u8 as char, left_vec.len() as u32);
         }
     }
@@ -80,7 +80,7 @@ pub fn part2() -> Result<u32, Error> {
         if value < min_value {
             min_value = value
         }
-        println!("{} {}", character, value)
+        // println!("{} {}", character, value)
     }
     Ok(min_value)
 }
