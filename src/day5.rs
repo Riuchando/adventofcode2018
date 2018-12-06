@@ -23,7 +23,8 @@ pub fn part1() -> Result<u32, Error> {
             } else if (left_vec.last().unwrap().is_ascii_uppercase()
                 && character.is_ascii_lowercase()
                 && character.to_ascii_uppercase() == *left_vec.last().unwrap())
-                || (left_vec.last().unwrap().is_ascii_lowercase() && character.is_ascii_uppercase()
+                || (left_vec.last().unwrap().is_ascii_lowercase()
+                    && character.is_ascii_uppercase()
                     && character.to_ascii_lowercase() == *left_vec.last().unwrap())
             {
                 left_vec.pop();
@@ -58,7 +59,8 @@ pub fn part2() -> Result<u32, Error> {
                     continue;
                 } else if (match left_vec.last() {
                     Some(x) => {
-                        (x.is_ascii_uppercase() && character.is_ascii_lowercase()
+                        (x.is_ascii_uppercase()
+                            && character.is_ascii_lowercase()
                             && character.to_ascii_uppercase() == *x
                             || (left_vec.last().unwrap().is_ascii_lowercase()
                                 && character.is_ascii_uppercase()
@@ -75,12 +77,10 @@ pub fn part2() -> Result<u32, Error> {
             char_count.insert(ascii_int as u8 as char, left_vec.len() as u32);
         }
     }
-    let mut min_value = 999999999;
-    for (character, value) in char_count {
-        if value < min_value {
-            min_value = value
-        }
-        // println!("{} {}", character, value)
-    }
-    Ok(min_value)
+    Ok(
+        match char_count.iter().map(|(_character, value)| value).min() {
+            Some(x) => *x,
+            None => 0,
+        },
+    )
 }
