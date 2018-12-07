@@ -28,10 +28,10 @@ pub fn part1() -> Result<u32, Error> {
             }
         }
     }
-    Ok(grid.iter()
+    Ok(grid
+        .iter()
         .flat_map(|row| row.iter().filter(|cell| **cell > 1).map(|_x| 1))
         .sum())
-    // Ok(0)
 }
 
 pub fn part2() -> Result<u32, Error> {
@@ -63,29 +63,47 @@ pub fn part2() -> Result<u32, Error> {
     }
 
     // fuck it replay instructions
-    for (index, instruction) in vec.clone().iter().enumerate() {
-        let mut invalid = false;
-        for x_coord in instruction.0..instruction.0 + instruction.2 {
-            for y_coord in instruction.1..instruction.1 + instruction.3 {
-                if grid[x_coord as usize][y_coord as usize] == vec.len() as u32 + 1 {
-                    invalid = true;
-                    break;
-                }
+    // for (index, instruction) in vec.clone().iter().enumerate() {
+    //     let mut invalid = false;
+    //     for x_coord in instruction.0..instruction.0 + instruction.2 {
+    //         for y_coord in instruction.1..instruction.1 + instruction.3 {
+    //             if grid[x_coord as usize][y_coord as usize] == vec.len() as u32 + 1 {
+    //                 invalid = true;
+    //                 break;
+    //             }
+    //         }
+    //         if invalid {
+    //             break;
+    //         }
+    //     }
+    //     if !invalid {
+    //         return Ok(index as u32 + 1);
+    //     }
+    // }
+    // Ok(0)
+    Ok(match vec
+        .clone()
+        .iter()
+        .enumerate()
+        .find(|(_index, instruction)| {
+            match (instruction.0..instruction.0 + instruction.2)
+                .cartesian_product(instruction.1..instruction.1 + instruction.3)
+                .find(|(x_coord, y_coord)| {
+                    grid[*x_coord as usize][*y_coord as usize] == vec.len() as u32 + 1
+                }) {
+                Some(_x) => false,
+                None => true,
             }
-            if invalid {
-                break;
-            }
-        }
-        if !invalid {
-            return Ok(index as u32 + 1);
-        }
-    }
-    Ok(0)
+        }) {
+        Some(x) => x.0 as u32 + 1,
+        None => 0,
+    })
 }
 
 pub fn part2_with_mathy_stuff() -> Result<u32, Error> {
     let vec = load_data()?;
-    Ok(vec.clone()
+    Ok(vec
+        .clone()
         .iter()
         .enumerate()
         .cartesian_product(vec.iter())

@@ -20,7 +20,8 @@ pub fn part1() -> Result<u32, Error> {
             .map_err(|_err| Error::new(ErrorKind::InvalidData, format!("couldn't parse")))
             .unwrap();
         let line_split = line_split.split("] ").collect::<Vec<&str>>();
-        let time = Utc.datetime_from_str(line_split[0], "[%Y-%m-%d %H:%M")
+        let time = Utc
+            .datetime_from_str(line_split[0], "[%Y-%m-%d %H:%M")
             .map_err(|_err| {
                 Error::new(ErrorKind::InvalidData, format!("couldn't parse datetime"))
             })?;
@@ -114,15 +115,22 @@ pub fn part1() -> Result<u32, Error> {
             sleep_start_time = instruction.0;
         }
     }
-    let (mut max_count, mut max_time) = (0, 0);
-    for (minute, count) in gaurd_sleep_schedule {
-        if count > max_count {
-            max_count = count;
-            max_time = minute;
-        }
-        println!("{} {}", max_count, max_time);
-    }
-    Ok(target_gaurd * max_time)
+    // let (mut max_count, mut max_time) = (0, 0);
+    // for (minute, count) in gaurd_sleep_schedule.clone() {
+    //     if count > max_count {
+    //         max_count = count;
+    //         max_time = minute;
+    //     }
+    //     println!("{} {}", max_count, max_time);
+    // }
+    // Ok(target_gaurd * max_time)
+
+    Ok(
+        match gaurd_sleep_schedule.iter().max_by(|x, y| x.1.cmp(y.1)) {
+            Some(x) => *x.0 as u32,
+            None => 0,
+        } * target_gaurd,
+    )
 }
 
 pub fn part2() -> Result<u32, Error> {
@@ -135,7 +143,8 @@ pub fn part2() -> Result<u32, Error> {
             .map_err(|_err| Error::new(ErrorKind::InvalidData, format!("couldn't parse")))
             .unwrap();
         let line_split = line_split.split("] ").collect::<Vec<&str>>();
-        let time = Utc.datetime_from_str(line_split[0], "[%Y-%m-%d %H:%M")
+        let time = Utc
+            .datetime_from_str(line_split[0], "[%Y-%m-%d %H:%M")
             .map_err(|_err| {
                 Error::new(ErrorKind::InvalidData, format!("couldn't parse datetime"))
             })?;
@@ -181,17 +190,39 @@ pub fn part2() -> Result<u32, Error> {
             sleep_start_time = instruction.0;
         }
     }
-    let (mut max_count, mut max_time, mut target_gaurd) = (0, 0, 0);
-    for (gaurd, gaurd_sleep_schedule) in gaurds_sleep_schedule {
-        for (minute, count) in gaurd_sleep_schedule {
-            if count > max_count {
-                max_count = count;
-                max_time = minute;
-                target_gaurd = gaurd;
-                println!("{} {} {}", gaurd, max_count, max_time);
-            }
-        }
-    }
+    // let (mut max_count, mut max_time, mut target_gaurd) = (0, 0, 0);
+    // for (gaurd, gaurd_sleep_schedule) in gaurds_sleep_schedule.clone() {
+    //     for (minute, count) in gaurd_sleep_schedule {
+    //         if count > max_count {
+    //             max_count = count;
+    //             max_time = minute;
+    //             target_gaurd = gaurd;
+    //             println!("{} {} {}", gaurd, max_count, max_time);
+    //         }
+    //     }
+    // }
+    // println!("iter version {} ", target_gaurd * max_time);
 
-    Ok(target_gaurd * max_time)
+    // Ok(target_gaurd * max_time)
+    Ok(match gaurds_sleep_schedule
+        .iter()
+        .map(|(target_gaurd, gaurd_sleep_schedule)| {
+            match gaurd_sleep_schedule.iter().max_by(
+                |(left_minute_count, _left_minute), (right_minute_count, _right_minute)| {
+                    left_minute_count.cmp(right_minute_count)
+                },
+            ) {
+                Some((minute_count, minute)) => (target_gaurd, *minute_count, *minute),
+                None => (target_gaurd, 0, 0),
+            }
+        })
+        .max_by(
+            |(_left_gaurd, left_minute_count, _left_minute),
+             (_right_gaurd, right_minute_count, _right_minute)| {
+                left_minute_count.cmp(&right_minute_count)
+            },
+        ) {
+        Some((gaurd, _minute_count, minute)) => gaurd * minute,
+        None => 0,
+    })
 }
