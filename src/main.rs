@@ -1,12 +1,12 @@
 // #[macro_use]
-#![feature(test)]
+// #![feature(test)]
 extern crate chrono;
 extern crate itertools;
 use std::env;
 use std::io::Error;
 
 extern crate petgraph;
-extern crate test;
+// extern crate test;
 
 use std::collections::HashSet;
 use std::hash::Hash;
@@ -57,16 +57,16 @@ fn main() -> Result<(), Error> {
 
     Ok(())
 }
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use test::Bencher;
-    #[bench]
-    fn bench_day5_part1(b: &mut Bencher) {
-        b.iter(|| day5::part1());
-    }
-    #[bench]
-    fn bench_day5_part2(b: &mut Bencher) {
-        b.iter(|| day5::part2());
-    }
-}
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+//     use test::Bencher;
+//     #[bench]
+//     fn bench_day5_part1(b: &mut Bencher) {
+//         b.iter(|| day5::part1());
+//     }
+//     #[bench]
+//     fn bench_day5_part2(b: &mut Bencher) {
+//         b.iter(|| day5::part2());
+//     }
+// }
